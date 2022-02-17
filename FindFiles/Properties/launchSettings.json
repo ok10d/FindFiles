@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "FindFiles": {
+      "commandName": "Project",
+      "commandLineArgs": "-s \"C:\\temp\" -f file1"
+    },
+    "Profile 1": {
+      "commandName": "Executable"
+    }
+  }
+}
