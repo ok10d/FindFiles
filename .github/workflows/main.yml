@@ -1,0 +1,57 @@
+# For more information on GitHub Actions, refer to https://github.com/features/actions
+# For a complete CI/CD sample to get started with GitHub Action workflows for Desktop Applications,
+# refer to https://github.com/microsoft/github-actions-for-desktop-apps
+
+name: .NET Core Console
+
+on:
+  push:
+    tags:
+      - v* # Push events to matching v*, i.e. v1.0, v20.15.10
+
+jobs:
+
+  build:
+    strategy:
+      matrix:
+        configuration: [Release]
+
+    runs-on: ubuntu-latest  # For a list of available runner types, refer to
+                             # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    # Install the .NET Core workload
+    - name: Install .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+
+    # build the application
+    - name: Build the application
+      run: |
+        dotnet build -c Release 
+
+    # # publish the application
+    # - name: Publish the application
+    #   run: |
+    #     dotnet publish -c Release -r win-x64 --self-contained false  
+    #     rm FindFiles/bin/Release/net6.0/win-x64/publish/FindFiles.pdb        
+   
+   # release
+    # - name: zip
+    #   id: zip    
+    #   uses: thedoctor0/zip-release@master
+    #   with:
+    #     type: 'zip'
+    #     filename: FindFiles_exe.zip
+    #     path: 'FindFiles/bin/Release/net6.0/win-x64/publish/'        
+    - name: Create Release
+      id: create_release    
+      uses: softprops/action-gh-release@v1
+      # with:
+      #   files: FindFiles_exe.zip
